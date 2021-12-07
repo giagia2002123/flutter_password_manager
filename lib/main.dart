@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_password_manager/passwordpage.dart';
 import 'colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -32,6 +33,9 @@ class _HomePageState extends State<HomePage> {
   void checkValidation() {
     if (formkey.currentState.validate()) {
       print("Validated");
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => PassworPage(),
+      ));
     }
   }
 
