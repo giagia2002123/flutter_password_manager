@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,15 +27,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
+  void checkValidation() {
+    if (formkey.currentState.validate()) {
+      print("Validated");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: dark,
       body: Center(
         child: Form(
+          key: formkey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Icon(
+                FontAwesomeIcons.userLock,
+                color: deeppurple,
+                size: 100.0,
+              ),
               Padding(
                 padding: EdgeInsets.all(30.0),
                 child: TextFormField(
@@ -43,10 +58,25 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 20.0,
                     fontFamily: "customFont",
                   ),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.blueGrey,
+                    labelText: "Enter Password:",
+                    labelStyle: TextStyle(
+                      color: dark,
+                    ),
+                  ),
+                  validator: (_var) {
+                    if (_var == "demo") {
+                      return null;
+                    } else {
+                      return "Password Doesn't Match";
+                    }
+                  },
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: checkValidation,
                 child: Text("Enter"),
                 style: ElevatedButton.styleFrom(
                   primary: deeppurple,
