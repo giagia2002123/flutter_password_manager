@@ -8,9 +8,74 @@ class PassworPage extends StatefulWidget {
 }
 
 class _PassworPageState extends State<PassworPage> {
+  TextStyle titleStyle = TextStyle(
+    fontSize: 18.0,
+    fontFamily: "customFont",
+    color: Colors.white,
+  );
+
+  TextStyle subtitleStyle = TextStyle(
+    fontSize: 16.0,
+    fontFamily: "customFont",
+    color: Colors.white70,
+  );
+
+  void addPassword() {
+    showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+              title: Text("Add Data"),
+              backgroundColor: deeppurple,
+              contentPadding: EdgeInsets.all(30.0),
+              children: <Widget>[
+                Form(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Select Type",
+                          labelStyle: subtitleStyle,
+                        ),
+                        style: titleStyle,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Enter Username/Email",
+                            labelStyle: subtitleStyle,
+                          ),
+                          style: titleStyle,
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Enter Password",
+                          labelStyle: subtitleStyle,
+                        ),
+                        style: titleStyle,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text("ADD"),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: addPassword,
+        child: FaIcon(FontAwesomeIcons.plus),
+        backgroundColor: deeppurple,
+        foregroundColor: Colors.white,
+      ),
       backgroundColor: dark,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -29,15 +94,11 @@ class _PassworPageState extends State<PassworPage> {
               ),
               title: Text(
                 "Facebook",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: titleStyle,
               ),
               subtitle: Text(
                 "Password",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: subtitleStyle,
               ),
             ),
           ),
@@ -55,15 +116,11 @@ class _PassworPageState extends State<PassworPage> {
               ),
               title: Text(
                 "Instagram",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: titleStyle,
               ),
               subtitle: Text(
                 "Password",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+                style: subtitleStyle,
               ),
             ),
           ),
