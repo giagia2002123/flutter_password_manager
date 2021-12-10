@@ -8,6 +8,8 @@ class PassworPage extends StatefulWidget {
 }
 
 class _PassworPageState extends State<PassworPage> {
+  GlobalKey<FormState> formstate = GlobalKey<FormState>();
+
   TextStyle titleStyle = TextStyle(
     fontSize: 18.0,
     fontFamily: "customFont",
@@ -20,15 +22,27 @@ class _PassworPageState extends State<PassworPage> {
     color: Colors.white70,
   );
 
+  String validateempty(_val) {
+    if (_val.isEmpty) {
+      return "Required Field";
+    } else {
+      return null;
+    }
+  }
+
   void addPassword() {
     showDialog(
         context: context,
         builder: (context) => SimpleDialog(
-              title: Text("Add Data"),
+              title: Text(
+                "Add Data",
+                style: titleStyle,
+              ),
               backgroundColor: deeppurple,
               contentPadding: EdgeInsets.all(30.0),
               children: <Widget>[
                 Form(
+                  key: formstate,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -36,8 +50,15 @@ class _PassworPageState extends State<PassworPage> {
                         decoration: InputDecoration(
                           labelText: "Select Type",
                           labelStyle: subtitleStyle,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: dark),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: dark),
+                          ),
                         ),
                         style: titleStyle,
+                        validator: validateempty,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -45,6 +66,12 @@ class _PassworPageState extends State<PassworPage> {
                           decoration: InputDecoration(
                             labelText: "Enter Username/Email",
                             labelStyle: subtitleStyle,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: dark),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: dark),
+                            ),
                           ),
                           style: titleStyle,
                         ),
@@ -53,12 +80,33 @@ class _PassworPageState extends State<PassworPage> {
                         decoration: InputDecoration(
                           labelText: "Enter Password",
                           labelStyle: subtitleStyle,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: dark),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: dark),
+                          ),
                         ),
                         style: titleStyle,
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text("ADD"),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (formstate.currentState.validate()) {
+                              print("Ready To Enter Data");
+                            }
+                          },
+                          child: Text("ADD"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.cyan,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 35.0,
+                              vertical: 10.0,
+                            ),
+                            elevation: 5.0,
+                          ),
+                        ),
                       ),
                     ],
                   ),
