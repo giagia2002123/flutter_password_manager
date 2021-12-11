@@ -49,7 +49,7 @@ class _PassworPageState extends State<PassworPage> {
   }
 
   Future queryall() async {
-    var allrows = await dbhelper.queryall();
+    allrows = await dbhelper.queryall();
     allrows.forEach((row) {
       print(row);
     });
@@ -205,20 +205,32 @@ class _PassworPageState extends State<PassworPage> {
                           borderRadius: BorderRadius.circular(5.0),
                         ),
                         width: MediaQuery.of(context).size.width * 0.9,
-                        child: ListTile(
-                          leading: FaIcon(
-                            FontAwesomeIcons.userSecret,
-                            size: 40.0,
-                            color: Colors.white,
-                          ),
-                          title: Text(
-                            allrows[index]['user'],
-                            style: titleStyle,
-                          ),
-                          subtitle: Text(
-                            allrows[index]['pass'],
-                            style: subtitleStyle,
-                          ),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              allrows[index]['type'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                fontFamily: "customFont",
+                              ),
+                            ),
+                            ListTile(
+                              leading: FaIcon(
+                                FontAwesomeIcons.userSecret,
+                                size: 40.0,
+                                color: Colors.white,
+                              ),
+                              title: Text(
+                                allrows[index]['user'],
+                                style: titleStyle,
+                              ),
+                              subtitle: Text(
+                                allrows[index]['pass'],
+                                style: subtitleStyle,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
