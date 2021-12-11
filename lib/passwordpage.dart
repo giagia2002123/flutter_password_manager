@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_password_manager/dbhelper.dart';
 import 'colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -9,6 +10,11 @@ class PassworPage extends StatefulWidget {
 
 class _PassworPageState extends State<PassworPage> {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
+  final dbhelper = Databasehelper.instance;
+  String type;
+  String user;
+  String pass;
+  var allrows;
 
   TextStyle titleStyle = TextStyle(
     fontSize: 18.0,
@@ -28,6 +34,26 @@ class _PassworPageState extends State<PassworPage> {
     } else {
       return null;
     }
+  }
+
+  void insertdata() async {
+    Navigator.pop(context);
+    Map<String, dynamic> row = {
+      Databasehelper.columnType: type,
+      Databasehelper.columnUser: user,
+      Databasehelper.columnPass: pass,
+    };
+    final id = await dbhelper.insert(row);
+    print(id);
+    setState(() {});
+  }
+
+  Future queryall() async {
+    var allrows = await dbhelper.queryall();
+    allrows.forEach((row) {
+      print(row);
+    });
+    print(allrows);
   }
 
   void addPassword() {
@@ -59,6 +85,9 @@ class _PassworPageState extends State<PassworPage> {
                         ),
                         style: titleStyle,
                         validator: validateempty,
+                        onChanged: (_val) {
+                          type = _val;
+                        },
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -74,6 +103,10 @@ class _PassworPageState extends State<PassworPage> {
                             ),
                           ),
                           style: titleStyle,
+                          validator: validateempty,
+                          onChanged: (_val) {
+                            user = _val;
+                          },
                         ),
                       ),
                       TextFormField(
@@ -88,6 +121,10 @@ class _PassworPageState extends State<PassworPage> {
                           ),
                         ),
                         style: titleStyle,
+                        validator: validateempty,
+                        onChanged: (_val) {
+                          pass = _val;
+                        },
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 15.0),
@@ -95,6 +132,7 @@ class _PassworPageState extends State<PassworPage> {
                           onPressed: () {
                             if (formstate.currentState.validate()) {
                               print("Ready To Enter Data");
+                              insertdata();
                             }
                           },
                           child: Text("ADD"),
@@ -118,6 +156,16 @@ class _PassworPageState extends State<PassworPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Saved Passwords",
+          style: TextStyle(
+            fontFamily: "customFont",
+          ),
+        ),
+        backgroundColor: Colors.blueGrey,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: addPassword,
         child: FaIcon(FontAwesomeIcons.plus),
@@ -125,54 +173,66 @@ class _PassworPageState extends State<PassworPage> {
         foregroundColor: Colors.white,
       ),
       backgroundColor: dark,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: deeppurple,
-            ),
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.facebook,
-                size: 40.0,
-                color: Colors.white,
-              ),
-              title: Text(
-                "Facebook",
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                "Password",
-                style: subtitleStyle,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 20.0),
-            decoration: BoxDecoration(
-              color: deeppurple,
-            ),
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: ListTile(
-              leading: FaIcon(
-                FontAwesomeIcons.instagram,
-                size: 40.0,
-                color: Colors.white,
-              ),
-              title: Text(
-                "Instagram",
-                style: titleStyle,
-              ),
-              subtitle: Text(
-                "Password",
-                style: subtitleStyle,
-              ),
-            ),
-          ),
-        ],
+      body: FutureBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.hasData != null) {
+            if (allrows.length == 0) {
+              return Center(
+                child: Text(
+                  "No Data Available\nClick On Te Add Button To Enter Some !",
+                  style: TextStyle(
+                    color: lightpurple,
+                    fontSize: 20.0,
+                    fontFamily: "customFont",
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            } else {
+              return Center(
+                child: Container(
+                  decoration: BoxDecoration(),
+                  width: MediaQuery.of(context).size.width * 0.93,
+                  child: ListView.builder(
+                    itemCount: allrows.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.only(
+                          top: 20.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: deeppurple,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: ListTile(
+                          leading: FaIcon(
+                            FontAwesomeIcons.userSecret,
+                            size: 40.0,
+                            color: Colors.white,
+                          ),
+                          title: Text(
+                            allrows[index]['user'],
+                            style: titleStyle,
+                          ),
+                          subtitle: Text(
+                            allrows[index]['pass'],
+                            style: subtitleStyle,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+        future: queryall(),
       ),
     );
   }

@@ -56,7 +56,7 @@ class Databasehelper {
     ''');
   }
 
-  // Functions to insert datq
+  // Functions to insert data
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await instance.databse;
     return await db.insert(table, row);
