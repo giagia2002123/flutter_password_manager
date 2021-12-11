@@ -14,7 +14,7 @@ class _PassworPageState extends State<PassworPage> {
   String type;
   String user;
   String pass;
-  var allrows;
+  var allrows = [];
 
   TextStyle titleStyle = TextStyle(
     fontSize: 18.0,
@@ -48,7 +48,7 @@ class _PassworPageState extends State<PassworPage> {
     setState(() {});
   }
 
-  Future queryall() async {
+  Future<void> queryall() async {
     allrows = await dbhelper.queryall();
     allrows.forEach((row) {
       print(row);

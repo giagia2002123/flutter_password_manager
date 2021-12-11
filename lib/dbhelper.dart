@@ -48,11 +48,11 @@ class Databasehelper {
     // SQL code
     await db.execute('''
       CREATE TABLE $table (
-        $columnID INTEGER PRIMARY KEY
+        $columnID INTEGER PRIMARY KEY,
         $columnType TEXT NOT NULL,
         $columnUser TEXT NOT NULL,
         $columnPass TEXT NOT NULL
-      )
+      );
     ''');
   }
 
